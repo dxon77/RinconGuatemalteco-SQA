@@ -1,0 +1,103 @@
+﻿@{
+    ViewData["Title"] = "Cobro de Productos";
+    var carrito = ViewBag.Carrito as List<RinconGuatemalteco.Models.ItemCarrito>;
+}
+
+<h2>Despacho de Producto</h2>
+<hr />
+
+<div class="row">
+    <!-- Formulario para agregar productos -->
+    <div class="col-md-5">
+        <div class="card">
+            <div class="card-header bg-dark text-white">Agregar Producto</div>
+            <div class="card-body">
+                <form asp-action="AgregarAlCarrito" method="post">
+                    <div class="mb-3">
+                        <label class="form-label">Producto</label>
+                        <select name="productoId" class="form-control" required>
+                            @foreach (var prod in ViewBag.Productos as List<RinconGuatemalteco.Models.Producto>)
+                            {
+                                <option value="@prod.Id">@prod.Nombre - Q@(prod.Precio)</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Cantidad</label>
+                        <input type="number" name="cantidad" value="1" min="1" class="form-control" required />
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">Agregar al Carrito</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tabla del carrito -->
+    <div class="col-md-7">
+        <h4>Carrito Actual</h4>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Producto</th>
+                    <th>Cant.</th>
+                    <th>Precio</th>
+                    <th>SubTotal</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (carrito != null && carrito.Any())
+                {
+                    foreach (var item in carrito)
+                    {
+                        <tr>
+                            <td>@item.Nombre</td>
+                            <td>@item.Cantidad</td>
+                            <td>Q@(item.Precio)</td>
+                            <td>Q@(item.SubTotal)</td>
+                            <td>
+                                <form asp-action="QuitarDelCarrito" method="post">
+                                    <input type="hidden" name="productoId" value="@item.ProductoId" />
+                                    <button type="submit" class="btn btn-sm btn-danger">X</button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr><td colspan="5" class="text-center">El carrito está vacío</td></tr>
+                }
+            </tbody>
+            <tfoot>
+                <tr>
+                    <th colspan="3" class="text-end">Total:</th>
+                    <th colspan="2">Q@(ViewBag.Total)</th>
+                </tr>
+            </tfoot>
+        </table>
+
+        <!-- Formulario para cobrar -->
+        <form asp-action="ProcesarVenta" method="post" class="mt-3">
+            <div class="row">
+                <div class="col-md-6">
+                    <label class="form-label">Cliente</label>
+                    <select name="clienteId" class="form-control" required>
+                        @foreach (var cli in ViewBag.Clientes as List<RinconGuatemalteco.Models.Cliente>)
+                        {
+                            <option value="@cli.Id">@cli.Nombre</option>
+                        }
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Método Pago</label>
+                    <select name="metodoPago" class="form-control" required>
+                        <option value="Efectivo">Efectivo</option>
+                        <option value="Tarjeta">Tarjeta</option>
+                    </select>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-success w-100 mt-3">Procesar Cobro Final</button>
+        </form>
+    </div>
+</div>

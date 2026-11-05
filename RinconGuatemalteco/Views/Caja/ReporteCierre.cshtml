@@ -1,0 +1,40 @@
+﻿@model RinconGuatemalteco.Models.Caja
+
+@{
+    ViewData["Title"] = "Reporte de Cierre";
+}
+
+<div class="card mt-4 col-md-6 mx-auto">
+    <div class="card-header bg-dark text-white">
+        <h4>Corte de Caja #@Model.Id</h4>
+    </div>
+    <div class="card-body">
+        <p><strong>Fecha Apertura:</strong> @Model.FechaApertura.ToString("dd/MM/yyyy HH:mm")</p>
+        <p><strong>Fecha Cierre:</strong> @Model.FechaCierre?.ToString("dd/MM/yyyy HH:mm")</p>
+        <hr />
+        <p><strong>Monto Inicial:</strong> Q@(Model.MontoInicial)</p>
+        <p><strong>Total Ventas en Efectivo:</strong> Q@(Model.TotalVentas)</p>
+        <p><strong>Monto Final Reportado:</strong> Q@(Model.MontoFinal)</p>
+        <hr />
+
+        @{
+            var esperado = Model.MontoInicial + Model.TotalVentas;
+            var diferencia = Model.MontoFinal - esperado;
+        }
+
+        <h5>Efectivo Esperado: Q@(esperado)</h5>
+
+        @if (diferencia == 0)
+        {
+            <h5 class="text-success">Cuadre Perfecto (Diferencia: Q0.00)</h5>
+        }
+        else if (diferencia > 0)
+        {
+            <h5 class="text-primary">Sobrante en Caja: Q@(diferencia)</h5>
+        }
+        else
+        {
+            <h5 class="text-danger">Faltante en Caja: Q@(diferencia)</h5>
+        }
+    </div>
+</div>

@@ -1,0 +1,44 @@
+﻿@model RinconGuatemalteco.Models.Factura
+
+@{
+    ViewData["Title"] = "Ticket de Venta";
+}
+
+<div class="card mt-4" style="width: 24rem; margin: 0 auto;">
+    <div class="card-body">
+        <h5 class="card-title text-center">LA CASA DEL RINCÓN GUATEMALTECO</h5>
+        <p class="text-center mb-1">Factura No. @Model.Id</p>
+        <p class="mb-1">Fecha: @Model.Fecha.ToString("dd/MM/yyyy HH:mm")</p>
+        <p class="mb-1">Cliente: @Model.Cliente.Nombre</p>
+        <p class="mb-3">Pago: @Model.MetodoPago</p>
+
+        <table class="table table-sm">
+            <thead>
+                <tr>
+                    <th>Cant.</th>
+                    <th>Producto</th>
+                    <th>Subtotal</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Detalles)
+                {
+                    <tr>
+                        <td>@item.Cantidad</td>
+                        <td>@item.Producto.Nombre</td>
+                        <td>Q@(item.SubTotal)</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        <h5 class="text-end">Total: Q@(Model.Total)</h5>
+
+        <!-- Código QR generado dinámicamente -->
+        <div class="text-center mt-3">
+            <p class="mb-1">Código QR de la Factura</p>
+            <img src="@Url.Action("GenerarQR", "Facturacion", new { id = Model.Id })" alt="Código QR" width="150" height="150" />
+        </div>
+
+    </div>
+</div>

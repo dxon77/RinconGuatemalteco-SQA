@@ -1,0 +1,36 @@
+﻿@{
+    ViewData["Title"] = "Caja";
+    var cajaAbierta = Model as RinconGuatemalteco.Models.Caja;
+}
+
+<h2>Control de Caja</h2>
+<hr />
+
+@if (cajaAbierta == null)
+{
+    <div class="alert alert-warning">No hay ninguna caja abierta. Debes abrir la caja para iniciar el día.</div>
+
+    <form asp-action="AbrirCaja" method="post" class="col-md-4">
+        <div class="mb-3">
+            <label class="form-label">Monto Inicial en Caja (Q)</label>
+            <input type="number" step="0.01" name="montoInicial" class="form-control" required />
+        </div>
+        <button type="submit" class="btn btn-primary">Abrir Caja</button>
+    </form>
+}
+else
+{
+    <div class="alert alert-success">
+        <strong>Caja Abierta.</strong> <br />
+        Fecha de Apertura: @cajaAbierta.FechaApertura.ToString("dd/MM/yyyy HH:mm") <br />
+        Monto Inicial: Q@(cajaAbierta.MontoInicial)
+    </div>
+
+    <form asp-action="CerrarCaja" method="post" class="col-md-4">
+        <div class="mb-3">
+            <label class="form-label">Monto Final en Caja (Efectivo contado)</label>
+            <input type="number" step="0.01" name="montoFinal" class="form-control" required />
+        </div>
+        <button type="submit" class="btn btn-danger">Realizar Corte de Caja</button>
+    </form>
+}

@@ -21,14 +21,14 @@ jobs:
         dotnet-version: '8.0.x' # O la versión que uses
 
     - name: Restaurar dependencias
-      run: dotnet restore
+      run: dotnet restore RinconGuatemalteco.slnx
 
     - name: Compilar (Build)
-      run: dotnet build --no-restore --configuration Release
+      run: dotnet build RinconGuatemalteco.slnx --no-restore --configuration Release
 
     - name: Ejecutar Pruebas y medir cobertura (Test)
       run: |
-        dotnet test --no-build --configuration Release \
+        dotnet test RinconGuatemalteco.slnx --no-build --configuration Release \
           /p:CollectCoverage=true \
           /p:CoverletOutputFormat=opencover \
           /p:CoverletOutput=./TestResults/coverage.opencover.xml

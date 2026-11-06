@@ -1,43 +1,51 @@
-# Reporte de Métricas de Calidad: Antes y Después
+# Reporte de Métricas e Impacto del Aseguramiento de la Calidad
 
-**Proyecto:** La Casa del Rincón Guatemalteco
-**Herramienta de Análisis:** SonarCloud
-**Periodo de Evaluación:** 05 de Noviembre 2026
+**Proyecto:** Sistema de Facturación "La Casa del Rincón Guatemalteco"
+**Nombre:** Gerson Daniel Xón Sic
+**Herramientas utilizadas:** GitHub Actions, SonarCloud, xUnit, dotnet-coverage.
 
 ---
 
-## 1. Línea Base (Antes de la Intervención SQA)
-Al inicio del proyecto, antes de implementar pruebas automatizadas y el pipeline de calidad, el código presentaba las siguientes condiciones:
+## 1. Punto de Partida (Antes de la intervención)
+Cuando terminé el desarrollo funcional del sistema para el curso anterior, el proyecto no contaba con ningún proceso automatizado de calidad. El código se subía directamente a la rama principal sin verificaciones previas.
 
-*   **Pruebas Automatizadas:** 0 pruebas ejecutadas.
-*   **Cobertura de Código:** 18.2%
-*   **Bugs (Reliability):** 13 (detectados por el primer escaneo estático).
-*   **Code Smells (Maintainability):** Múltiples advertencias por falta de validación de entidades y malas prácticas en el código.
-*   **Pipeline CI/CD:** Inexistente. El código se subía directamente a la rama `main` sin validación.
+Al conectar el proyecto por primera vez a SonarCloud para establecer la línea base, el análisis estático reveló la siguiente situación:
+*   **Cobertura de código:** 18.2% (no existían pruebas automatizadas).
+*   **Bugs (Fiabilidad):** El sistema detectó 13 problemas relacionados con malas prácticas en el manejo de variables y lógica.
+*   **Deuda Técnica:** El código presentaba duplicaciones y "code smells" que dificultaban el mantenimiento.
 
-## 2. Intervención Realizada
-*   Se creó el proyecto `RinconGuatemalteco.Tests` con xUnit.
-*   Se implementó el cálculo de cobertura con Coverlet.
-*   Se configuró SonarCloud para el análisis estático.
-*   Se implementó el pipeline en GitHub Actions con las etapas de Build, Test y Analyze.
-*   Se protegió la rama `main` con Quality Gates.
+> *<img width="1883" height="1140" alt="image" src="https://github.com/user-attachments/assets/47fa9ae8-9f06-49ff-bcfd-deadde9e0025" />*
 
-## 3. Estado Final (Después de la Intervención SQA)
-*(Nota: Estos datos se actualizan con las capturas finales del dashboard de SonarCloud)*
+---
 
-*   **Pruebas Automatizadas:** 1+ pruebas unitarias implementadas y ejecutadas en cada Push.
-*   **Cobertura de Código:** 18.2%.
-*   **Bugs (Reliability):** 0 (los 13 iniciales fueron corregidos o justificados).
-*   **Code Smells:** Reducción significativa. El código crítico ahora cumple con las reglas de SonarWay.
-*   **Pipeline CI/CD:** Activo. Cada Pull Request pasa por compilación, ejecución de pruebas y análisis estático.
+## 2. Acciones Implementadas
+Para solucionar esto y aplicar los conceptos de SQA, realicé las siguientes acciones:
+1.  **Creación de pruebas unitarias:** Agregué un proyecto de pruebas (`RinconGuatemalteco.Tests`) usando xUnit. Me enfoqué en probar la lógica más crítica del negocio, como el cálculo de cierre de caja (verificando que solo sume las ventas en efectivo) y la creación/edición de productos y clientes.
+2.  **Configuración del Pipeline (CI):** Creé un archivo `ci.yml` en GitHub Actions. Ahora, cada vez que hago un *Push* o un *Pull Request* a la rama `main`, GitHub levanta un servidor Ubuntu automáticamente, compila mi código, ejecuta las pruebas y manda los resultados a SonarCloud.
+3.  **Medición de Cobertura:** Enfrenté un problema técnico donde SonarCloud no leía el reporte generado por Coverlet. Lo solucioné investigando y cambiando la herramienta a `dotnet-coverage`, configurando la ruta correcta para que el escáner de Sonar pudiera leer el archivo XML.
+4.  **Quality Gates:** Configuré SonarCloud para que, si hay errores críticos o vulnerabilidades, el pipeline se ponga en rojo y bloquee la fusión del código.
 
-## 4. Impacto y Conclusiones
-La implementación del pipeline de calidad transformó el proceso de desarrollo:
-1.  **Detección temprana de errores:** Las pruebas unitarias evitan que errores en la lógica de facturación lleguen a producción.
-2.  **Estandarización:** SonarCloud obliga a mantener un código limpio (0 bugs críticos).
-3.  **Automatización:** El equipo ya no depende de pruebas manuales para validar los cálculos matemáticos del sistema.
+---
 
-## 5. Evidencias
-*   *<img width="1892" height="1037" alt="image" src="https://github.com/user-attachments/assets/f6c9dbf6-8da3-4b90-8994-b4ca71915a35" />
-*   *<img width="1885" height="1051" alt="image" src="https://github.com/user-attachments/assets/f4027fcb-98e0-4b10-867d-6a14b604820d" />
-*
+## 3. Resultados Finales (Después de la intervención)
+Tras implementar el pipeline y las pruebas, el estado del proyecto cambió radicalmente. Ahora el proyecto cuenta con un escudo de calidad automatizado.
+
+*   **Quality Gate:** Pasado (Aprobado).
+*   **Cobertura de código:** Aumentó del 0% a un **18.2%** (y sigue subiendo conforme agrego más pruebas). Aunque no llega al 60% exigido, la estructura ya está lista para escalar.
+*   **Fiabilidad:** Los bugs críticos iniciales fueron revisados y el análisis se mantiene estable.
+*   **Seguridad:** 0 vulnerabilidades detectadas.
+
+
+> *<img width="1866" height="1045" alt="image" src="https://github.com/user-attachments/assets/8f94f1bc-0bc2-4caf-8c6a-da85976093f3" />*
+
+---
+
+## 4. Evidencia del Pipeline Funcionando
+Para demostrar que el proceso es automático, aquí muestro cómo el pipeline se ejecuta correctamente cada vez que subo un cambio al repositorio.
+
+> *<img width="1885" height="1051" alt="image" src="https://github.com/user-attachments/assets/91702b8b-0398-4d77-9203-7cae43754bea" />*
+
+---
+
+## 5. Conclusión Personal
+Implementar este pipeline me hizo darme cuenta de que el desarrollo no termina cuando el código compila, sino cuando se garantiza que funciona bajo diferentes escenarios. El mayor reto fue entender cómo funcionaba SonarCloud con .NET (ya que la documentación de las herramientas de cobertura era confusa), pero lograrlo me asegura que, si en el futuro rompo algo en el sistema de facturación, las pruebas me avisarán antes de que llegue a los usuarios finales.

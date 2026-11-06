@@ -86,6 +86,7 @@ namespace RinconGuatemalteco.Controllers
 
             var carrito = ObtenerCarrito();
             if (!carrito.Any()) return BadRequest("El carrito está vacío.");
+            
 
             var nuevaFactura = new Factura
             {

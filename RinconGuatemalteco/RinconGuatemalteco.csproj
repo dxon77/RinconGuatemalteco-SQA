@@ -16,4 +16,8 @@
     <PackageReference Include="QRCoder" Version="1.8.1" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Include=".github\workflows\ci.yml" />
+  </ItemGroup>
+
 </Project>

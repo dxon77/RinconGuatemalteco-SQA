@@ -1,7 +1,9 @@
 # Reporte de Métricas e Impacto del Aseguramiento de la Calidad
 
 **Proyecto:** Sistema de Facturación "La Casa del Rincón Guatemalteco"
+
 **Nombre:** Gerson Daniel Xón Sic
+
 **Herramientas utilizadas:** GitHub Actions, SonarCloud, xUnit, dotnet-coverage.
 
 ---

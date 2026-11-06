@@ -13,12 +13,12 @@ jobs:
     steps:
     - uses: actions/checkout@v4
       with:
-        fetch-depth: 0
+        fetch-depth: 0 # Requerido por SonarCloud
 
     - name: Instalar .NET
       uses: actions/setup-dotnet@v4
       with:
-        dotnet-version: '10.0.x' # Ajusta a tu versión si es necesario
+        dotnet-version: '10.0.x' # Ajusta a tu versión si es necesario (ej. 8.0.x)
 
     - name: Restaurar dependencias
       run: dotnet restore RinconGuatemalteco.slnx
@@ -43,7 +43,7 @@ jobs:
         /o:"dxon77" 
         /d:sonar.token="${{ secrets.SONAR_TOKEN }}" 
         /d:sonar.host.url="https://sonarcloud.io" 
-        /d:sonar.cs.opencover.reportsPaths="**/coverage.opencover.xml"
+        /d:sonar.cs.opencover.reportsPaths="RinconGuatemalteco.Tests/TestResults/coverage.opencover.xml"
 
     - name: Compilar con Sonar
       run: dotnet build RinconGuatemalteco.slnx --no-incremental --configuration Release

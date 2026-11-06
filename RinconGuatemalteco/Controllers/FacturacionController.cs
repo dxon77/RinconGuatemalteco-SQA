@@ -85,8 +85,8 @@ namespace RinconGuatemalteco.Controllers
             if (cliente == null) return NotFound("Cliente no encontrado");
 
             var carrito = ObtenerCarrito();
-            if (!carrito.Any()) return BadRequest("El carrito está vacío.");
-
+            if (!carrito.Any()) 
+    return BadRequest("Error de validación SQA: No se puede procesar una venta con el carrito vacío.");
             var nuevaFactura = new Factura
             {
                 ClienteId = clienteId,

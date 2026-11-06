@@ -86,7 +86,7 @@ namespace RinconGuatemalteco.Controllers
 
             var carrito = ObtenerCarrito();
             if (!carrito.Any()) 
-    return BadRequest("Error de validación SQA: No se puede procesar una venta con el carrito vacío.");
+            return BadRequest("Error de validación SQA: No se puede procesar una venta con el carrito vacío.");
             var nuevaFactura = new Factura
             {
                 ClienteId = clienteId,

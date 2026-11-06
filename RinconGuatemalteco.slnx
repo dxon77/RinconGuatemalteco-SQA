@@ -1,4 +1,7 @@
 <Solution>
+  <Folder Name="/Elementos de la solución/">
+    <File Path="sonar-project.properties" />
+  </Folder>
   <Project Path="RinconGuatemalteco.Tests/RinconGuatemalteco.Tests.csproj" Id="4870aaa8-34a1-4113-b13b-29077086ad52" />
   <Project Path="RinconGuatemalteco/RinconGuatemalteco.csproj" />
 </Solution>

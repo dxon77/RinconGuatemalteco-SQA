@@ -1,0 +1,46 @@
+name: Pipeline de Calidad (SQA)
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Instalar .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '8.0.x' # O la versión que uses
+
+    - name: Restaurar dependencias
+      run: dotnet restore
+
+    - name: Compilar (Build)
+      run: dotnet build --no-restore --configuration Release
+
+    - name: Ejecutar Pruebas y medir cobertura (Test)
+      run: |
+        dotnet test --no-build --configuration Release \
+          /p:CollectCoverage=true \
+          /p:CoverletOutputFormat=opencover \
+          /p:CoverletOutput=./TestResults/coverage.opencover.xml
+
+    - name: Instalar Herramienta de SonarCloud
+      run: dotnet tool install --global dotnet-sonarscanner
+
+    - name: Iniciar Análisis de SonarCloud
+      run: dotnet sonarscanner begin /k:"dxon77_RinconGuatemalteco-SQA" /o:"dxon77" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.cs.opencover.reportsPaths="**/coverage.opencover.xml"
+
+    - name: Compilar con Sonar
+      run: dotnet build --no-incremental --configuration Release
+
+    - name: Finalizar Análisis de SonarCloud
+      run: dotnet sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
